@@ -1,0 +1,12 @@
+occupancy_mode:
+    name: 'Occupancy'
+    initial: off
+    icon: mdi:account-circle
+danny_home:
+    name: 'Danny Presence'
+    initial: off
+    icon: mdi:account-circle
+maire_home:
+    name: 'Maire Presence'
+    initial: off
+    icon: mdi:account-circle

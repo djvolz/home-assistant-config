@@ -1,0 +1,50 @@
+scene_livingroom:
+    name: Living Room Scenes
+    icon: mdi:palette
+    initial: "-"
+    options:
+        - "-"
+        - Relax
+        - Read
+        - Soho
+        - Tokyo
+        - Larch Madness
+        - Nebula
+        - Bright
+        - Arctic aurora
+        - Concentrate
+        - Energize
+        - Nightlight
+        - Dimmed
+        - Savanna sunset
+        - Honolulu
+        - Spring blossom
+        - Tropical twilight
+
+scene_kitchen:
+    name: Kitchen Scenes
+    icon: mdi:palette
+    initial: "-"
+    options:
+        - "-"
+        - Relax
+        - Read
+        - Bright
+        - Concentrate
+        - Energize
+        - Nightlight
+        - Dimmed
+
+scene_bedroom:
+    name: Kitchen Scenes
+    icon: mdi:palette
+    initial: "-"
+    options:
+        - "-"
+        - Relax
+        - Read
+        - Bright
+        - Concentrate
+        - Energize
+        - Nightlight
+        - Dimmed
