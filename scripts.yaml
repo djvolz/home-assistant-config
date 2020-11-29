@@ -5,16 +5,16 @@ welcome_home:
         - service: script.turn_on
           entity_id:
               - script.play_sonos
-              - script.turn_on_lights
+              - script.sundown_lights
               - script.open_sesame
-              - script.turn_off_climate_eco
+              # - script.turn_off_climate_eco
 
 leaving_home:
     sequence:
         - service: script.turn_on
           entity_id:
               - script.interior_off
-              - script.turn_on_climate_eco
+              # - script.turn_on_climate_eco
 sleep:
     sequence:
         - service: script.turn_on
@@ -22,18 +22,6 @@ sleep:
               - script.interior_off
         - service: lock.lock
           entity_id: lock.door
-        - service: climate.set_temperature
-          data:
-            entity_id: climate.hallway_thermostat
-            temperature: 60
-            hvac_mode: heat
-        # - delay: '07:30:00'
-        # - service: climate.set_temperature
-        #   data:
-        #     entity_id: climate.hallway_thermostat
-        #     temperature: 65
-        #     hvac_mode: heat
-        # - delay: '00:30:00'
         # - service: climate.set_temperature
         #   data:
         #     entity_id: climate.hallway_thermostat
@@ -42,38 +30,39 @@ sleep:
 
 interior_off:
     sequence:
+        # Need to prevent TV turning off leading to lights on  
         - service: automation.turn_off
           entity_id: automation.tv_off
         - service: media_player.turn_off
-          entity_id: media_player.tv
+          entity_id: media_player.samsung_un55ks8500
         - service: media_player.media_stop
           entity_id: group.music_players
         - service: light.turn_off
-          entity_id: group.all_lights
+          entity_id: all
         - service: automation.turn_on
           entity_id: automation.tv_off
-     
-turn_on_climate_eco:
-  sequence:
-    - service: climate.set_preset_mode
-      data:
-        entity_id: climate.hallway_thermostat
-        preset_mode: 'eco'
 
-turn_off_climate_eco:
-  sequence:
-    - condition: state
-      entity_id: input_boolean.occupancy_mode
-      state: 'on'
-    - service: climate.set_preset_mode
-      data:
-        entity_id: climate.hallway_thermostat
-        preset_mode: 'none'    
-    - service: climate.set_temperature
-      data:
-        entity_id: climate.hallway_thermostat
-        temperature: 60
-        hvac_mode: heat 
+# turn_on_climate_eco:
+#   sequence:
+#     - service: climate.set_preset_mode
+#       data:
+#         entity_id: climate.hallway_thermostat
+#         preset_mode: 'eco'
+
+# turn_off_climate_eco:
+#   sequence:
+#     - condition: state
+#       entity_id: input_boolean.occupancy_mode
+#       state: 'on'
+#     - service: climate.set_preset_mode
+#       data:
+#         entity_id: climate.hallway_thermostat
+#         preset_mode: 'none'    
+#     - service: climate.set_temperature
+#       data:
+#         entity_id: climate.hallway_thermostat
+#         temperature: 60
+#         hvac_mode: heat 
 
 open_sesame:
     sequence:
@@ -84,30 +73,13 @@ open_sesame:
 ##################
 play_sonos:
     sequence:
-        - service: script.turn_on
-          entity_id:
-              - script.play_kitchen_sonos
-              - script.play_living_room_sonos
-play_kitchen_sonos:
-    sequence:
-        - condition: state
-          entity_id: media_player.kitchen
-          state: 'paused'
-        # Set a quiet music volume
-        - service: media_player.volume_set
-          data:
-              entity_id: media_player.kitchen
-              volume_level: 0.16
-        # Play some music
-        - service: media_player.select_source
-          data:
-              entity_id: media_player.kitchen
-              source: "Ratatat"
-play_living_room_sonos:
-    sequence:
         - condition: state
           entity_id: media_player.living_room
           state: 'paused'
+        - service: sonos.join
+          data:
+            master: media_player.living_room
+            entity_id: all
         # Set a quiet music volume
         - service: media_player.volume_set
           data:
@@ -117,16 +89,12 @@ play_living_room_sonos:
         - service: media_player.select_source
           data:
               entity_id: media_player.living_room
-              source: "Ratatat"
+              source: "Ratatat"  
 
 # Lights
 ##################
 turn_on_lights:
     sequence:
-        # If the sun is down, turn on all the lights
-        - condition: state
-          entity_id: sun.sun
-          state: 'below_horizon'
         - service: hue.hue_activate_scene
           data:
               group_name: Living Room
@@ -134,54 +102,15 @@ turn_on_lights:
         - service: hue.hue_activate_scene
           data:
               group_name: Kitchen
-              scene_name: Bright
-
-turn_on_kitchen_lights:
-    sequence:
-        - service: hue.hue_activate_scene
-          data:
-              group_name: Kitchen
-              scene_name: Bright
-
-turn_off_kitchen_lights:
-    sequence:
-        - service: light.turn_off
-          data:
-              entity_id: light.trash_lamp
-
-
-flip_kitchen_lights:
-  sequence:
-    - service: script.turn_on
-      data_template:
-        entity_id: >-
-          {% if is_state('group.kitchen_lights', 'off') %}
-            script.turn_on_kitchen_lights
-          {% else %}
-            script.turn_off_kitchen_lights
-          {% endif %}
-
-turn_on_bedroom_lights:
-    sequence:
-        - service: hue.hue_activate_scene
-          data:
-              group_name: Bedroom
               scene_name: Read
-
-turn_off_bedroom_lights:
+        - service: switch.turn_on
+          entity_id: switch.plugger
+sundown_lights:
     sequence:
-        - service: light.turn_off
-          data:
-              entity_id: light.bed_lamp
-
-
-flip_bedroom_lights:
-  sequence:
-    - service: script.turn_on
-      data_template:
-        entity_id: >-
-          {% if is_state('light.bed_lamp', 'off') %}
-            script.turn_on_bedroom_lights
-          {% else %}
-            script.turn_off_bedroom_lights
-          {% endif %}
+        # If the sun is down, turn on all the lights
+        - condition: state
+          entity_id: sun.sun
+          state: 'below_horizon'
+        - service: script.turn_on
+          entity_id:
+              - script.turn_on_lights
