@@ -1,20 +1,20 @@
 occupancy_mode:
-    name: 'Occupancy'
-    initial: off
-    icon: mdi:account-circle
+  name: "Occupancy"
+  initial: off
+  icon: mdi:account-circle
 danny_home:
-    name: 'Danny Presence'
-    initial: off
-    icon: mdi:account-circle
+  name: "Danny Presence"
+  initial: off
+  icon: mdi:account-circle
 maire_home:
-    name: 'Maire Presence'
-    initial: off
-    icon: mdi:account-circle
+  name: "Maire Presence"
+  initial: off
+  icon: mdi:account-circle
 danny_phone_charging:
-    name: 'Danny Phone Charging'
-    initial: off
-    icon: mdi:account-circle
+  name: "Danny Phone Charging"
+  initial: off
+  icon: mdi:account-circle
 maire_phone_charging:
-    name: 'Maire Phone Charging'
-    initial: off
-    icon: mdi:account-circle
+  name: "Maire Phone Charging"
+  initial: off
+  icon: mdi:account-circle

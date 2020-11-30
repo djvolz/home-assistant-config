@@ -1,46 +1,46 @@
 # Home
 ##################
 welcome_home:
-    sequence:
-        - service: script.turn_on
-          entity_id:
-              - script.play_sonos
-              - script.sundown_lights
-              - script.open_sesame
-              # - script.turn_off_climate_eco
+  sequence:
+    - service: script.turn_on
+      entity_id:
+        - script.play_sonos
+        - script.sundown_lights
+        - script.open_sesame
+        # - script.turn_off_climate_eco
 
 leaving_home:
-    sequence:
-        - service: script.turn_on
-          entity_id:
-              - script.interior_off
-              # - script.turn_on_climate_eco
+  sequence:
+    - service: script.turn_on
+      entity_id:
+        - script.interior_off
+        # - script.turn_on_climate_eco
 sleep:
-    sequence:
-        - service: script.turn_on
-          entity_id:
-              - script.interior_off
-        - service: lock.lock
-          entity_id: lock.door
-        # - service: climate.set_temperature
-        #   data:
-        #     entity_id: climate.hallway_thermostat
-        #     temperature: 60
-        #     hvac_mode: heat
+  sequence:
+    - service: script.turn_on
+      entity_id:
+        - script.interior_off
+    - service: lock.lock
+      entity_id: lock.door
+    # - service: climate.set_temperature
+    #   data:
+    #     entity_id: climate.hallway_thermostat
+    #     temperature: 60
+    #     hvac_mode: heat
 
 interior_off:
-    sequence:
-        # Need to prevent TV turning off leading to lights on  
-        - service: automation.turn_off
-          entity_id: automation.tv_off
-        - service: media_player.turn_off
-          entity_id: media_player.samsung_un55ks8500
-        - service: media_player.media_stop
-          entity_id: group.music_players
-        - service: light.turn_off
-          entity_id: all
-        - service: automation.turn_on
-          entity_id: automation.tv_off
+  sequence:
+    # Need to prevent TV turning off leading to lights on
+    - service: automation.turn_off
+      entity_id: automation.tv_off
+    - service: media_player.turn_off
+      entity_id: media_player.samsung_un55ks8500
+    - service: media_player.media_stop
+      entity_id: group.music_players
+    - service: light.turn_off
+      entity_id: all
+    - service: automation.turn_on
+      entity_id: automation.tv_off
 
 # turn_on_climate_eco:
 #   sequence:
@@ -57,60 +57,60 @@ interior_off:
 #     - service: climate.set_preset_mode
 #       data:
 #         entity_id: climate.hallway_thermostat
-#         preset_mode: 'none'    
+#         preset_mode: 'none'
 #     - service: climate.set_temperature
 #       data:
 #         entity_id: climate.hallway_thermostat
 #         temperature: 60
-#         hvac_mode: heat 
+#         hvac_mode: heat
 
 open_sesame:
-    sequence:
-        - service: lock.unlock
-          entity_id: lock.door
+  sequence:
+    - service: lock.unlock
+      entity_id: lock.door
 
 # Sonos
 ##################
 play_sonos:
-    sequence:
-        - condition: state
-          entity_id: media_player.living_room
-          state: 'paused'
-        - service: sonos.join
-          data:
-            master: media_player.living_room
-            entity_id: all
-        # Set a quiet music volume
-        - service: media_player.volume_set
-          data:
-              entity_id: media_player.living_room
-              volume_level: 0.08
-        # Play some music
-        - service: media_player.select_source
-          data:
-              entity_id: media_player.living_room
-              source: "Ratatat"  
+  sequence:
+    - condition: state
+      entity_id: media_player.living_room
+      state: "paused"
+    - service: sonos.join
+      data:
+        master: media_player.living_room
+        entity_id: all
+    # Set a quiet music volume
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.living_room
+        volume_level: 0.08
+    # Play some music
+    - service: media_player.select_source
+      data:
+        entity_id: media_player.living_room
+        source: "Ratatat"
 
 # Lights
 ##################
 turn_on_lights:
-    sequence:
-        - service: hue.hue_activate_scene
-          data:
-              group_name: Living Room
-              scene_name: Relax
-        - service: hue.hue_activate_scene
-          data:
-              group_name: Kitchen
-              scene_name: Read
-        - service: switch.turn_on
-          entity_id: switch.plugger
+  sequence:
+    - service: hue.hue_activate_scene
+      data:
+        group_name: Living Room
+        scene_name: Relax
+    - service: hue.hue_activate_scene
+      data:
+        group_name: Kitchen
+        scene_name: Read
+    - service: switch.turn_on
+      entity_id: switch.plugger
 sundown_lights:
-    sequence:
-        # If the sun is down, turn on all the lights
-        - condition: state
-          entity_id: sun.sun
-          state: 'below_horizon'
-        - service: script.turn_on
-          entity_id:
-              - script.turn_on_lights
+  sequence:
+    # If the sun is down, turn on all the lights
+    - condition: state
+      entity_id: sun.sun
+      state: "below_horizon"
+    - service: script.turn_on
+      entity_id:
+        - script.turn_on_lights

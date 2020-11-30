@@ -1,31 +1,31 @@
 homeassistant:
-    # Name of the location where Home Assistant is running
-    name: Home
-    # Location required to calculate the time the sun rises and sets
-    latitude: !secret home_latitude
-    longitude: !secret home_longitude
-    # Impacts weather/sunrise data (altitude above sea level in meters)
-    elevation: !secret home_elevation
-    # metric for Metric, imperial for Imperial
-    unit_system: imperial
-    # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-    time_zone: !secret time_zone
-    # Customization file
-    customize: !include customize.yaml
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret home_latitude
+  longitude: !secret home_longitude
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: !secret home_elevation
+  # metric for Metric, imperial for Imperial
+  unit_system: imperial
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: !secret time_zone
+  # Customization file
+  customize: !include customize.yaml
 
 # Configure a default setup of Home Assistant (frontend, api, etc)
 default_config:
 
 http:
-    base_url: !secret http_base_url
-    ssl_certificate: !secret http_ssl_certificate
-    ssl_key: !secret http_ssl_key
-    ip_ban_enabled: true
-    login_attempts_threshold: 5
+  base_url: !secret http_base_url
+  ssl_certificate: !secret http_ssl_certificate
+  ssl_key: !secret http_ssl_key
+  ip_ban_enabled: true
+  login_attempts_threshold: 5
 
 weather:
-    - platform: darksky
-      api_key: !secret darksky_api_key
+  - platform: darksky
+    api_key: !secret darksky_api_key
 
 # Discover some devices automatically
 discovery:
@@ -36,40 +36,40 @@ history:
 # View all events in a logbook
 logbook:
 logger:
-    default: info
+  default: info
 
 lock:
-    - platform: sesame
-      api_key: !secret sesame_api_key
+  - platform: sesame
+    api_key: !secret sesame_api_key
 
 hue:
-    bridges:
-        - host: !secret philips_hue_ipaddress
-          allow_unreachable: true
-          allow_hue_groups: false
+  bridges:
+    - host: !secret philips_hue_ipaddress
+      allow_unreachable: true
+      allow_hue_groups: false
 
 vacuum:
-    - platform: xiaomi_miio
-      host: !secret xiaomi_ip_addr
-      token: !secret xiaomi_token
+  - platform: xiaomi_miio
+    host: !secret xiaomi_ip_addr
+    token: !secret xiaomi_token
 
 homekit:
-    filter:
-        include_domains:
-          - light
-          - media_player
-          - input_boolean
-        exclude_domains:
-          - lock
-          - sensor
-        include_entities:
-          - script.interior_off
-          - script.welcome_home
+  filter:
+    include_domains:
+      - light
+      - media_player
+      - input_boolean
+    exclude_domains:
+      - lock
+      - sensor
+    include_entities:
+      - script.interior_off
+      - script.welcome_home
 
 api:
 
 ifttt:
-    key: !secret ifttt_key
+  key: !secret ifttt_key
 
 # Checks for available updates
 # Note: This component will send some information about your system to
@@ -77,30 +77,30 @@ ifttt:
 # For more information, please see:
 # https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
 updater:
-    # Optional, allows Home Assistant developers to focus on popular components.
-    # include_used_components: true
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
 
 google_assistant:
-    project_id: !secret google_assistant_project_id
-    service_account:
-        client_email: !secret google_assistant_client_email
-        private_key: !secret google_assistant_private_key
-    report_state: true
-    exposed_domains:
-      - media_player
+  project_id: !secret google_assistant_project_id
+  service_account:
+    client_email: !secret google_assistant_client_email
+    private_key: !secret google_assistant_private_key
+  report_state: true
+  exposed_domains:
+    - media_player
 
 alexa:
-    smart_home:
-        filter:
-          include_domains:
-            - lock
-            - media_player
-            - switch
-          exclude_entities:
-            - media_player.living_room
-          exclude_domains:
-            - automation
-        
+  smart_home:
+    filter:
+      include_domains:
+        - lock
+        - media_player
+        - switch
+      exclude_entities:
+        - media_player.living_room
+      exclude_domains:
+        - automation
+
 badnest:
   issue_token: !secret badnest_issue_token
   cookie: !secret badnest_cookie
@@ -109,17 +109,16 @@ badnest:
 climate:
   - platform: badnest
     scan_interval: 10
-    
+
 tplink:
 
 device_tracker:
 
 xfinitydatausage:
-- platform: xfinitydatausage
-  name: Xfinity Data Usage
-  username: !secret xfinity_username
-  password: !secret xfinity_password
-
+  - platform: xfinitydatausage
+    name: Xfinity Data Usage
+    username: !secret xfinity_username
+    password: !secret xfinity_password
 
 ####################################################
 #                                                  #

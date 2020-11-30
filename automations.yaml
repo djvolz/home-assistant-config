@@ -5,10 +5,10 @@
     platform: state
     entity_id: input_select.scene_livingroom
   action:
-  - service: hue.hue_activate_scene
-    data_template:
-      group_name: Living Room
-      scene_name: '{{ states(''input_select.scene_livingroom'') }}'
+    - service: hue.hue_activate_scene
+      data_template:
+        group_name: Living Room
+        scene_name: "{{ states('input_select.scene_livingroom') }}"
 - id: automation_kitchen_lights
   alias: Scene Kitchen
   initial_state: true
@@ -16,10 +16,10 @@
     platform: state
     entity_id: input_select.scene_kitchen
   action:
-  - service: hue.hue_activate_scene
-    data_template:
-      group_name: Kitchen
-      scene_name: '{{ states(''input_select.scene_kitchen'') }}'
+    - service: hue.hue_activate_scene
+      data_template:
+        group_name: Kitchen
+        scene_name: "{{ states('input_select.scene_kitchen') }}"
 - id: automation_bedroom_lights
   alias: Scene Bedroom
   initial_state: true
@@ -27,10 +27,10 @@
     platform: state
     entity_id: input_select.scene_bedroom
   action:
-  - service: hue.hue_activate_scene
-    data_template:
-      group_name: Bedroom
-      scene_name: '{{ states(''input_select.scene_bedroom'') }}'
+    - service: hue.hue_activate_scene
+      data_template:
+        group_name: Bedroom
+        scene_name: "{{ states('input_select.scene_bedroom') }}"
 - id: sunset
   alias: Sunset
   trigger:
@@ -40,9 +40,9 @@
   condition:
     condition: state
     entity_id: input_boolean.occupancy_mode
-    state: 'on'
+    state: "on"
   action:
-  - service: script.turn_on_lights
+    - service: script.turn_on_lights
 - id: ifttt_webhook
   alias: IFTTT Webhook
   trigger:
@@ -51,142 +51,142 @@
     event_data:
       action: call_service
   action:
-    service_template: '{{ trigger.event.data.service }}'
+    service_template: "{{ trigger.event.data.service }}"
     data_template:
-      entity_id: '{{ trigger.event.data.entity_id }}'
+      entity_id: "{{ trigger.event.data.entity_id }}"
 - id: family_away
   alias: Family Away
   trigger:
-  - entity_id: group.family
-    from: home
-    platform: state
-    to: not_home
+    - entity_id: group.family
+      from: home
+      platform: state
+      to: not_home
   action:
-  - service: input_boolean.turn_off
-    entity_id: input_boolean.occupancy_mode
-  initial_state: 'on'
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.occupancy_mode
+  initial_state: "on"
 - id: danny_away
   alias: Danny Away
   trigger:
-  - entity_id: input_boolean.danny_home
-    from: 'on'
-    platform: state
-    to: 'off'
+    - entity_id: input_boolean.danny_home
+      from: "on"
+      platform: state
+      to: "off"
   action:
-  - service: device_tracker.see
-    data:
-      dev_id: danny
-      location_name: not_home
+    - service: device_tracker.see
+      data:
+        dev_id: danny
+        location_name: not_home
 - id: danny_home
   alias: Danny Home
   trigger:
-  - entity_id: input_boolean.danny_home
-    from: 'off'
-    platform: state
-    to: 'on'
+    - entity_id: input_boolean.danny_home
+      from: "off"
+      platform: state
+      to: "on"
   action:
-  - service: input_boolean.turn_on
-    entity_id: input_boolean.occupancy_mode
-  - service: device_tracker.see
-    data:
-      dev_id: danny
-      location_name: home
-  initial_state: 'on'
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.occupancy_mode
+    - service: device_tracker.see
+      data:
+        dev_id: danny
+        location_name: home
+  initial_state: "on"
 - id: maire_away
   alias: Maire Away
   trigger:
-  - entity_id: input_boolean.maire_home
-    from: 'on'
-    platform: state
-    to: 'off'
+    - entity_id: input_boolean.maire_home
+      from: "on"
+      platform: state
+      to: "off"
   action:
-  - service: device_tracker.see
-    data:
-      dev_id: maire
-      location_name: not_home
+    - service: device_tracker.see
+      data:
+        dev_id: maire
+        location_name: not_home
 - id: maire_home
   alias: Maire Home
   trigger:
-  - entity_id: input_boolean.maire_home
-    from: 'off'
-    platform: state
-    to: 'on'
+    - entity_id: input_boolean.maire_home
+      from: "off"
+      platform: state
+      to: "on"
   action:
-  - service: input_boolean.turn_on
-    entity_id: input_boolean.occupancy_mode
-  - service: device_tracker.see
-    data:
-      dev_id: maire
-      location_name: home
-  initial_state: 'on'
+    - service: input_boolean.turn_on
+      entity_id: input_boolean.occupancy_mode
+    - service: device_tracker.see
+      data:
+        dev_id: maire
+        location_name: home
+  initial_state: "on"
 - id: bedtime
   alias: Bedtime
   trigger:
     platform: time
     at: 00:00:00
   condition:
-  - condition: state
-    entity_id: input_boolean.occupancy_mode
-    state: 'on'
-  - condition: state
-    entity_id: group.living_room_lights
-    state: 'on'
+    - condition: state
+      entity_id: input_boolean.occupancy_mode
+      state: "on"
+    - condition: state
+      entity_id: group.living_room_lights
+      state: "on"
   action:
-  - service: hue.hue_activate_scene
-    data_template:
-      group_name: Bedroom
-      scene_name: Read
-  - service: hue.hue_activate_scene
-    data_template:
-      group_name: Kitchen
-      scene_name: Relax
-  initial_state: 'on'
+    - service: hue.hue_activate_scene
+      data_template:
+        group_name: Bedroom
+        scene_name: Read
+    - service: hue.hue_activate_scene
+      data_template:
+        group_name: Kitchen
+        scene_name: Relax
+  initial_state: "on"
 - id: sleep
   alias: Sleep
   trigger:
-  - entity_id: light.bed_lamp
-    from: 'on'
-    platform: state
-    to: 'off'
+    - entity_id: light.bed_lamp
+      from: "on"
+      platform: state
+      to: "off"
   condition:
-  - condition: state
-    entity_id: input_boolean.occupancy_mode
-    state: 'on'
+    - condition: state
+      entity_id: input_boolean.occupancy_mode
+      state: "on"
   action:
-  - service: script.sleep
-  initial_state: 'on'
+    - service: script.sleep
+  initial_state: "on"
 - id: occupied
   alias: Occupied
   trigger:
-  - entity_id: input_boolean.occupancy_mode
-    from: 'off'
-    platform: state
-    to: 'on'
+    - entity_id: input_boolean.occupancy_mode
+      from: "off"
+      platform: state
+      to: "on"
   action:
-  - service: script.welcome_home
-  initial_state: 'on'
+    - service: script.welcome_home
+  initial_state: "on"
 - id: unoccupied
   alias: Unoccupied
   trigger:
-  - entity_id: input_boolean.occupancy_mode
-    from: 'on'
-    platform: state
-    to: 'off'
+    - entity_id: input_boolean.occupancy_mode
+      from: "on"
+      platform: state
+      to: "off"
   action:
-  - service: script.interior_off
-  - service: input_boolean.turn_off
-    entity_id: input_boolean.danny_home
-  - service: input_boolean.turn_off
-    entity_id: input_boolean.maire_home
-  initial_state: 'on'
+    - service: script.interior_off
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.danny_home
+    - service: input_boolean.turn_off
+      entity_id: input_boolean.maire_home
+  initial_state: "on"
 - id: danny_phone_charging
-  alias: 'Danny Phone Charging'
+  alias: "Danny Phone Charging"
   initial_state: false
   trigger:
     platform: event
     event_type: ios.action_fired
     event_data:
-      actionName: 'Danny Phone Charging'
+      actionName: "Danny Phone Charging"
   action:
     service: input_boolean.turn_on
     entity_id: input_boolean.danny_phone_charging
