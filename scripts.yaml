@@ -30,17 +30,14 @@ go_to_sleep:
 
 interior_off:
   sequence:
-    # Need to prevent TV turning off leading to lights on
-    - service: automation.turn_off
-      entity_id: automation.tv_off
     - service: media_player.turn_off
       entity_id: media_player.samsung_un55ks8500
     - service: media_player.media_stop
       entity_id: group.music_players
     - service: light.turn_off
       entity_id: all
-    - service: automation.turn_on
-      entity_id: automation.tv_off
+    - service: switch.turn_off
+      entity_id: switch.christmas_lights
 
 # turn_on_climate_eco:
 #   sequence:
@@ -52,8 +49,8 @@ interior_off:
 # turn_off_climate_eco:
 #   sequence:
 #     - condition: state
-#       entity_id: input_boolean.occupancy_mode
-#       state: 'on'
+#       entity_id: group.family
+#       state: 'home'
 #     - service: climate.set_preset_mode
 #       data:
 #         entity_id: climate.hallway_thermostat
@@ -104,7 +101,7 @@ turn_on_lights:
         group_name: Kitchen
         scene_name: Read
     - service: switch.turn_on
-      entity_id: switch.plugger
+      entity_id: switch.christmas_lights
 sundown_lights:
   sequence:
     # If the sun is down, turn on all the lights
