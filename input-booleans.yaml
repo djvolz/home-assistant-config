@@ -13,8 +13,8 @@ maire_home:
 danny_phone_charging:
   name: "Danny Phone Charging"
   initial: off
-  icon: mdi:account-circle
+  icon: mdi:flash
 maire_phone_charging:
   name: "Maire Phone Charging"
   initial: off
-  icon: mdi:account-circle
+  icon: mdi:flash

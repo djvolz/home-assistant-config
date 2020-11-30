@@ -6,7 +6,7 @@ welcome_home:
       entity_id:
         - script.play_sonos
         - script.sundown_lights
-        - script.open_sesame
+        - script.unlock_sesame_lock
         # - script.turn_off_climate_eco
 
 leaving_home:
@@ -15,7 +15,7 @@ leaving_home:
       entity_id:
         - script.interior_off
         # - script.turn_on_climate_eco
-sleep:
+go_to_sleep:
   sequence:
     - service: script.turn_on
       entity_id:
@@ -64,7 +64,7 @@ interior_off:
 #         temperature: 60
 #         hvac_mode: heat
 
-open_sesame:
+unlock_sesame_lock:
   sequence:
     - service: lock.unlock
       entity_id: lock.door

@@ -43,6 +43,28 @@
     state: "on"
   action:
     - service: script.turn_on_lights
+- id: night_lighting
+  alias: Night Lighting
+  trigger:
+    platform: time
+    at: 00:00:00
+  condition:
+    - condition: state
+      entity_id: input_boolean.occupancy_mode
+      state: "on"
+    - condition: state
+      entity_id: group.living_room_lights
+      state: "on"
+  action:
+    - service: hue.hue_activate_scene
+      data_template:
+        group_name: Bedroom
+        scene_name: Read
+    - service: hue.hue_activate_scene
+      data_template:
+        group_name: Kitchen
+        scene_name: Relax
+  initial_state: "on"
 - id: ifttt_webhook
   alias: IFTTT Webhook
   trigger:
@@ -119,42 +141,7 @@
         dev_id: maire
         location_name: home
   initial_state: "on"
-- id: bedtime
-  alias: Bedtime
-  trigger:
-    platform: time
-    at: 00:00:00
-  condition:
-    - condition: state
-      entity_id: input_boolean.occupancy_mode
-      state: "on"
-    - condition: state
-      entity_id: group.living_room_lights
-      state: "on"
-  action:
-    - service: hue.hue_activate_scene
-      data_template:
-        group_name: Bedroom
-        scene_name: Read
-    - service: hue.hue_activate_scene
-      data_template:
-        group_name: Kitchen
-        scene_name: Relax
-  initial_state: "on"
-- id: sleep
-  alias: Sleep
-  trigger:
-    - entity_id: light.bed_lamp
-      from: "on"
-      platform: state
-      to: "off"
-  condition:
-    - condition: state
-      entity_id: input_boolean.occupancy_mode
-      state: "on"
-  action:
-    - service: script.sleep
-  initial_state: "on"
+# Occupancy logic
 - id: occupied
   alias: Occupied
   trigger:
@@ -179,14 +166,80 @@
     - service: input_boolean.turn_off
       entity_id: input_boolean.maire_home
   initial_state: "on"
+# Phone charging logic
 - id: danny_phone_charging
   alias: "Danny Phone Charging"
-  initial_state: false
+  initial_state: "on"
   trigger:
     platform: event
     event_type: ios.action_fired
     event_data:
-      actionName: "Danny Phone Charging"
+      actionName: "danny_phone_charging"
   action:
     service: input_boolean.turn_on
     entity_id: input_boolean.danny_phone_charging
+- id: danny_phone_unplugged
+  alias: "Danny Phone Unplugged"
+  initial_state: "on"
+  trigger:
+    platform: event
+    event_type: ios.action_fired
+    event_data:
+      actionName: "danny_phone_unplugged"
+  action:
+    service: input_boolean.turn_off
+    entity_id: input_boolean.danny_phone_charging
+- id: maire_phone_charging
+  alias: "Maire Phone Charging"
+  initial_state: "on"
+  trigger:
+    platform: event
+    event_type: ios.action_fired
+    event_data:
+      actionName: "maire_phone_charging"
+  action:
+    service: input_boolean.turn_on
+    entity_id: input_boolean.maire_phone_charging
+- id: maire_phone_unplugged
+  alias: "Maire Phone Unplugged"
+  initial_state: "on"
+  trigger:
+    platform: event
+    event_type: ios.action_fired
+    event_data:
+      actionName: "maire_phone_unplugged"
+  action:
+    service: input_boolean.turn_off
+    entity_id: input_boolean.maire_phone_charging
+
+# Sleeping logic
+- id: going_to_sleep
+  alias: "Going to sleep"
+  initial_state: "on"
+  trigger:
+    - entity_id: input_boolean.danny_phone_charging
+      from: "off"
+      platform: state
+      to: "on"
+    - entity_id: input_boolean.maire_phone_charging
+      from: "off"
+      platform: state
+      to: "on"
+  condition:
+    # Both phones need to be plugged in to trigger
+    - condition: state
+      entity_id: input_boolean.danny_phone_charging
+      state: "on"
+    - condition: state
+      entity_id: input_boolean.maire_phone_charging
+      state: "on"
+    # We have to be home
+    - condition: state
+      entity_id: input_boolean.occupancy_mode
+      state: "on"
+    # It's best if the bedroom light is on (iffiest condition)
+    - condition: state
+      entity_id: light.bed_lamp
+      state: "on"
+  action:
+    - service: script.go_to_sleep

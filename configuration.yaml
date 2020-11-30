@@ -68,9 +68,6 @@ homekit:
 
 api:
 
-ifttt:
-  key: !secret ifttt_key
-
 # Checks for available updates
 # Note: This component will send some information about your system to
 # the developers to assist with development of Home Assistant.
@@ -114,11 +111,40 @@ tplink:
 
 device_tracker:
 
-xfinitydatausage:
-  - platform: xfinitydatausage
-    name: Xfinity Data Usage
-    username: !secret xfinity_username
-    password: !secret xfinity_password
+ios:
+  actions:
+    - name: danny_phone_charging
+      background_color: "#000000"
+      label:
+        text: "Danny Phone Charging"
+        color: "#ff0000"
+      icon:
+        icon: mdi:power-plug
+        color: "#ffffff"
+    - name: danny_phone_unplugged
+      background_color: "#000000"
+      label:
+        text: "Danny Phone Unplugged"
+        color: "#ff0000"
+      icon:
+        icon: mdi:power-plug-off
+        color: "#ffffff"
+    - name: maire_phone_charging
+      background_color: "#000000"
+      label:
+        text: "Maire Phone Charging"
+        color: "#ff0000"
+      icon:
+        icon: mdi:power-plug
+        color: "#ffffff"
+    - name: maire_phone_unplugged
+      background_color: "#000000"
+      label:
+        text: "Maire Phone Unplugged"
+        color: "#ff0000"
+      icon:
+        icon: mdi:power-plug-off
+        color: "#ffffff"
 
 ####################################################
 #                                                  #
