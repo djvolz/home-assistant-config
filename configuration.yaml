@@ -63,8 +63,9 @@ homekit:
       - lock
       - sensor
     include_entities:
-      - script.interior_off
+      - script.go_to_sleep
       - script.welcome_home
+      - automation.going_to_sleep
 
 api:
 

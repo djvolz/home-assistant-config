@@ -147,80 +147,30 @@
       to: not_home
   action:
     - service: script.interior_off
-# Phone charging logic
-- id: danny_phone_charging
-  alias: "Danny Phone Charging"
-  initial_state: "on"
-  trigger:
-    platform: event
-    event_type: ios.action_fired
-    event_data:
-      actionName: "danny_phone_charging"
-  action:
-    service: input_boolean.turn_on
-    entity_id: input_boolean.danny_phone_charging
-- id: danny_phone_unplugged
-  alias: "Danny Phone Unplugged"
-  initial_state: "on"
-  trigger:
-    platform: event
-    event_type: ios.action_fired
-    event_data:
-      actionName: "danny_phone_unplugged"
-  action:
-    service: input_boolean.turn_off
-    entity_id: input_boolean.danny_phone_charging
-- id: maire_phone_charging
-  alias: "Maire Phone Charging"
-  initial_state: "on"
-  trigger:
-    platform: event
-    event_type: ios.action_fired
-    event_data:
-      actionName: "maire_phone_charging"
-  action:
-    service: input_boolean.turn_on
-    entity_id: input_boolean.maire_phone_charging
-- id: maire_phone_unplugged
-  alias: "Maire Phone Unplugged"
-  initial_state: "on"
-  trigger:
-    platform: event
-    event_type: ios.action_fired
-    event_data:
-      actionName: "maire_phone_unplugged"
-  action:
-    service: input_boolean.turn_off
-    entity_id: input_boolean.maire_phone_charging
-
 # Sleeping logic
 - id: going_to_sleep
   alias: "Going to sleep"
   initial_state: "on"
   trigger:
-    - entity_id: input_boolean.danny_phone_charging
+    - entity_id: input_boolean.danny_sleep
       from: "off"
       platform: state
       to: "on"
-    - entity_id: input_boolean.maire_phone_charging
+    - entity_id: input_boolean.maire_sleep
       from: "off"
       platform: state
       to: "on"
   condition:
-    # Both phones need to be plugged in to trigger
+    # Both people should be sleeping
     - condition: state
-      entity_id: input_boolean.danny_phone_charging
+      entity_id: input_boolean.danny_sleep
       state: "on"
     - condition: state
-      entity_id: input_boolean.maire_phone_charging
+      entity_id: input_boolean.maire_sleep
       state: "on"
     # We have to be home
     - condition: state
       entity_id: group.family
       state: home
-    # It's best if the bedroom light is on (iffiest condition)
-    - condition: state
-      entity_id: light.bed_lamp
-      state: "on"
   action:
     - service: script.go_to_sleep
