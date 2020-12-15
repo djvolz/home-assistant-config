@@ -148,6 +148,23 @@
   action:
     - service: script.interior_off
 # Sleeping logic
+## First person to go to sleep has the lamp turn off
+- id: turn_off_bed_lamp
+  alias: "Going to sleep"
+  initial_state: "on"
+  trigger:
+    - entity_id: input_boolean.danny_sleep
+      from: "off"
+      platform: state
+      to: "on"
+    - entity_id: input_boolean.maire_sleep
+      from: "off"
+      platform: state
+      to: "on"
+  action:
+    - service: light.turn_off
+      entity_id: light.bed_lamp
+## Second person turns off the whole house
 - id: going_to_sleep
   alias: "Going to sleep"
   initial_state: "on"
